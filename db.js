@@ -16,6 +16,17 @@ const Cat = db.define('cat', {
   weeksInShelter: INTEGER
 })
 
+Cat.beforeCreate(
+  cat => {
+    if (cat.ownerId){
+      cat.adopted = true;
+    }
+    if (!cat.ownerId){
+      cat.weeksInShelter = Math.floor(Math.random()*10);
+    }
+  }
+)
+
 const Owner = db.define('owner', {
   name: {
     type: STRING,
