@@ -29,6 +29,38 @@ app.get('/cats', async(req, res, next)=> {
   }
 })
 
+app.get('/cats/details/:id', async(req, res, next) => {
+  try {
+    // req.params.id comes from the :id in the route above
+    // all query params are available as properites of req.params
+    const cat = await Cat.findByPk(req.params.id);
+    res.send(cat);
+  }
+  catch(err){
+    next(err);
+  }
+})
+
+app.get('/cats/adoptable', async(req, res, next) => {
+  try{
+    const adoptableCats = await Cat.findAll({where: {adopted: false}})
+    res.send(adoptableCats);
+  }
+  catch(err){
+    next(err);
+  }
+})
+
+app.get('/cats/adopted', async(req, res, next) => {
+  try{
+    const adoptedCats = await Cat.findAll({where: {adopted: true}})
+    res.send(adoptedCats);
+  }
+  catch(err){
+    next(err);
+  }
+})
+
 const init = async() => {
   try{
     await db.authenticate();
