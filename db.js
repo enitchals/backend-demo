@@ -63,22 +63,21 @@ const syncAndSeed = async() => {
   await Cat.create({name: 'Mustard', age: 2, adjective: 'skittish', ownerId: 1});
   await Cat.create({name: 'Mary', age: 9, adjective: 'cuddly'});
   const cat = await Cat.create({name: 'Maxine', age: 4, adjective: 'playful'});
-  console.log(Cat.catMeow());
-  console.log(cat.sayMeow());
+
+  // uncomment these to see instance and class methods being called when the db is seeded
+  // console.log(Cat.catMeow());
+  // console.log(cat.sayMeow());
+
   // can't call catMeow() on an instance because it's a class level method
   // console.log(cat.catMeow());
+
   // can't call sayMeow() on the class/Model because it's an instance-level method
   // console.log(Cat.sayMeow());
 }
 
-const init = async() => {
-  try{
-    await db.authenticate();
-    await syncAndSeed();
-  }
-  catch(err){
-    console.log(err);
-  }
+module.exports = {
+  db,
+  syncAndSeed,
+  Cat,
+  Owner
 }
-
-init();
