@@ -16,10 +16,25 @@ const Cat = db.define('cat', {
   weeksInShelter: INTEGER
 })
 
+const Owner = db.define('owner', {
+  name: {
+    type: STRING,
+    allowNull: false
+  },
+  email: {
+    type: STRING,
+    isEmail: true,
+    allowNull: false
+  }
+})
+
+Owner.hasMany(Cat);
+
 const syncAndSeed = async() => {
   await db.sync({force: true});
+  await Owner.create({name: 'Ellen', email: 'ellen@ilovecats.com'})
   await Cat.create({name: 'Mike', age: 5, adjective: 'friendly'});
-  await Cat.create({name: 'Mustard', age: 2, adjective: 'skittish'});
+  await Cat.create({name: 'Mustard', age: 2, adjective: 'skittish', ownerId: 1});
   await Cat.create({name: 'Mary', age: 9, adjective: 'cuddly'});
   await Cat.create({name: 'Maxine', age: 4, adjective: 'playful'});
 }
