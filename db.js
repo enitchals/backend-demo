@@ -1,8 +1,17 @@
 const Sequelize = require('sequelize');
-const {STRING, INTEGER, BOOLEAN, VIRTUAL} = Sequelize;
+const {STRING, INTEGER, BOOLEAN, VIRTUAL, Model} = Sequelize;
 const db = new Sequelize('postgres://localhost/cat_shelter');
 
-const Cat = db.define('cat', {
+class Cat extends Model {
+  static catMeow() {
+    return 'meow';
+  }
+  sayMeow(){
+    return 'this cat says meow!'
+  }
+}
+
+Cat.init( {
   name: {
     type: STRING,
     allowNull: false
@@ -20,7 +29,7 @@ const Cat = db.define('cat', {
       return `${this.name} is a ${this.age} year old, ${this.adjective} cat who has been at the shelter for ${this.weeksInShelter} weeks.`
     }
   }
-})
+}, {sequelize: db})
 
 Cat.beforeCreate(
   cat => {
@@ -53,7 +62,13 @@ const syncAndSeed = async() => {
   await Cat.create({name: 'Mike', age: 5, adjective: 'friendly'});
   await Cat.create({name: 'Mustard', age: 2, adjective: 'skittish', ownerId: 1});
   await Cat.create({name: 'Mary', age: 9, adjective: 'cuddly'});
-  await Cat.create({name: 'Maxine', age: 4, adjective: 'playful'});
+  const cat = await Cat.create({name: 'Maxine', age: 4, adjective: 'playful'});
+  console.log(Cat.catMeow());
+  console.log(cat.sayMeow());
+  // can't call catMeow() on an instance because it's a class level method
+  // console.log(cat.catMeow());
+  // can't call sayMeow() on the class/Model because it's an instance-level method
+  // console.log(Cat.sayMeow());
 }
 
 const init = async() => {
