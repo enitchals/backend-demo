@@ -11,6 +11,16 @@ app.use(express.urlencoded({extended: false}));
 // the function if you want.
 const PORT = 3000;
 
+app.post('/cats', async(req, res, next) => {
+  try {
+    const newCat = await Cat.create(req.body);
+    res.status(201).send(newCat);
+  }
+  catch(err){
+    next(err);
+  }
+})
+
 app.get('/cats', async(req, res, next)=> {
   try{
     const cats = await Cat.findAll();
@@ -21,7 +31,6 @@ app.get('/cats', async(req, res, next)=> {
       res.status(200).json(cats);
       // more about JSON:
       // https://www.w3schools.com/js/js_json_intro.asp
-
     }
   }
   catch(err){
