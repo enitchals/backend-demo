@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const {STRING, INTEGER, BOOLEAN} = Sequelize;
+const {STRING, INTEGER, BOOLEAN, VIRTUAL} = Sequelize;
 const db = new Sequelize('postgres://localhost/cat_shelter');
 
 const Cat = db.define('cat', {
@@ -13,7 +13,13 @@ const Cat = db.define('cat', {
     type: BOOLEAN,
     defaultValue: false
   },
-  weeksInShelter: INTEGER
+  weeksInShelter: INTEGER,
+  description: {
+    type: VIRTUAL,
+    get(){
+      return `${this.name} is a ${this.age} year old, ${this.adjective} cat who has been at the shelter for ${this.weeksInShelter} weeks.`
+    }
+  }
 })
 
 Cat.beforeCreate(
