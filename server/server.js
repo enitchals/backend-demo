@@ -1,6 +1,5 @@
 const { db, syncAndSeed, Cat, Owner } = require('../db')
 const express = require('express');
-const router = require('express').Router();
 
 const morgan = require('morgan');
 
